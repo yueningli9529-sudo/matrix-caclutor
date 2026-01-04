@@ -1,2 +1,9 @@
-# matrix-caclutor
-a calculator that can calculate almost everything about matrix reverse,REF,RREF......
+# matrix-caclutor（c++）
+implement a basic matrix class in c++
+
+#Features
+-Addition,dot product,cross product
+-Row operations
+-REF,RREF
+-Reverse
+-null,col
