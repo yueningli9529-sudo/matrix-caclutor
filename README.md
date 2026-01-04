@@ -1,6 +1,6 @@
 # matrix-caclutor（c++）
 
-implement a basic matrix class in c++
+implement a basic matrix class based on rational-class in c++
 
 ## Features
 - Addition,dot product,cross product
