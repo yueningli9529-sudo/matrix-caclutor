@@ -19,3 +19,5 @@ A C++ implementation of a matrix class with exact arithmetic based on rational n
 g++ -std=c++17 main.cpp Matrix.cpp Rational.cpp -o matrix
 ./matrix
 
+## Notes
+This project was refactored to follow standard C++ header/source separation.
