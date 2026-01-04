@@ -1,14 +1,21 @@
-# matrix-caclutor（c++）
+# Matrix Library (C++)
 
-implement a basic matrix class based on rational-class in c++
+A C++ implementation of a matrix class with exact arithmetic based on rational numbers.
 
 ## Features
-- Addition,dot product,cross product
-- Row operations
-- REF,RREF
-- Reverse 
-- null,col
+- Matrix addition, subtraction, multiplication
+- REF / RREF computation
+- Rank, null space, column space
+- Matrix inverse and determinant
+- Solving linear systems
 
-## Build and Run
-g++ main.cpp Matrix.cpp -o matrix
+## Project Structure
+- `Matrix.hpp / Matrix.cpp` — matrix class
+- `Rational.hpp / Rational.cpp` — rational number class
+- `main.cpp` — simple usage example
+
+## Build
+```bash
+g++ -std=c++17 main.cpp Matrix.cpp Rational.cpp -o matrix
 ./matrix
+
