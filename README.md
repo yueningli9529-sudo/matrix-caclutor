@@ -5,5 +5,5 @@ implement a basic matrix class in c++
 -Addition,dot product,cross product
 -Row operations
 -REF,RREF
--Reverse
+-Reverse 
 -null,col
