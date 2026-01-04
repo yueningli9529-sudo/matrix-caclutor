@@ -14,10 +14,10 @@ A C++ implementation of a matrix class with exact arithmetic based on rational n
 - `Rational.hpp / Rational.cpp` — rational number class
 - `main.cpp` — simple usage example
 
+## Notes
+This project was refactored to follow standard C++ header/source separation.
+
 ## Build
 ```bash
 g++ -std=c++17 main.cpp Matrix.cpp Rational.cpp -o matrix
 ./matrix
-
-## Notes
-This project was refactored to follow standard C++ header/source separation.
