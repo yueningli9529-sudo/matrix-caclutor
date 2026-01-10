@@ -4,32 +4,24 @@
 #include <cstddef>
 #include <vector>
 #include <iosfwd>
-#include "Rational.hpp"
+#include <stdexcept>
 
+template <typename T>
 class Matrix
 {
 public:
     // constructor
-    Matrix(std::size_t row = 0, std::size_t column = 0, Rational value = 0);
+    Matrix(std::size_t row = 0, std::size_t column = 0, const T &value = T{});
     std::size_t row() const;
     std::size_t column() const;
-    // get matrix
-    void getmatrix(std::size_t row, std::size_t column);
     // access members
-    Rational at(std::size_t i, std::size_t j) const;
-    Rational &at(std::size_t i, std::size_t j);
-    Rational operator()(std::size_t i, std::size_t j) const;
-    Rational &operator()(std::size_t i, std::size_t j);
+    T &at(std::size_t i, std::size_t j);
+    const T &at(std::size_t i, std::size_t j) const;
+    T &operator()(std::size_t i, std::size_t j);
+    const T &operator()(std::size_t i, std::size_t j) const;
     // operator overload
-    friend std::ostream &operator<<(std::ostream &out, const Matrix &a);
-    friend Matrix operator+(const Matrix &a, const Matrix &b);
     Matrix &operator+=(const Matrix &b);
-    friend Matrix operator-(const Matrix &a);
-    friend Matrix operator-(const Matrix &a, const Matrix &b);
     Matrix &operator-=(const Matrix &b);
-    friend Matrix operator*(Rational s, const Matrix &a);
-    friend Matrix operator*(const Matrix &a, Rational s);
-    friend Matrix operator*(const Matrix &a, const Matrix &b);
     // identity
     static Matrix identity(std::size_t n);
     // power
@@ -37,47 +29,69 @@ public:
     // transpose
     Matrix transpose() const;
     // ERO
-    Matrix &swap_two_lines(std::size_t s, std::size_t t);
-    Matrix &multiply_one_line(Rational a, std::size_t s);
-    Matrix &add_one_to_another(Rational a, std::size_t s, std::size_t t);
+    Matrix &swap_two_lines(std::size_t s, std::size_t t, T *det = nullptr);
+    Matrix &multiply_one_line(const T &a, std::size_t s, T *det = nullptr);
+    Matrix &add_one_to_another(const T &a, std::size_t s, std::size_t t, T *det = nullptr);
     // REF
-    Matrix &find_std_leading(std::size_t &s_r, std::size_t &s_c);
-    Matrix &reduce_by_std_leading(std::size_t &s_r, std::size_t &s_c);
-    Matrix &change_leading_to_one(std::size_t &s_r, std::size_t &s_c);
-    Matrix &one_REF(std::size_t &s_r, std::size_t &s_c);
-    Matrix &REF();
+    Matrix &find_std_leading(std::size_t &s_r, std::size_t &s_c, T *det = nullptr);
+    Matrix &reduce_by_std_leading(std::size_t &s_r, std::size_t &s_c, T *det = nullptr);
+    Matrix &change_leading_to_one(std::size_t &s_r, std::size_t &s_c, T *det = nullptr);
+    Matrix &one_REF(std::size_t &s_r, std::size_t &s_c, T *det = nullptr);
+    Matrix &REF(T *det = nullptr);
     // RREF
-    std::size_t find_the_leading_one_in_line_s(std::size_t s);
+    std::size_t find_the_leading_one_in_line_s(std::size_t s) const;
     Matrix &change_column_to_zero(std::size_t row_lead, std::size_t col_lead);
     Matrix &RREF();
     // rank
-    std::size_t rank();
+    std::size_t rank() const;
     // null & col
-    Matrix null();
-    bool is_variable(std::size_t s);
-    Matrix col();
+    Matrix null() const;
+    bool is_variable(std::size_t s) const;
+    Matrix col() const;
     // solve equation
     Matrix augmented(Matrix const &b) const;
-    Matrix solve(Matrix b);
-    // ERO for det
-    Matrix &swap_two_lines(std::size_t s, std::size_t t, Rational &det);
-    Matrix &multiply_one_line(Rational a, std::size_t s, Rational &det);
-    Matrix &add_one_to_another(Rational a, std::size_t s, std::size_t t, Rational &det);
-    // REF for deç
-    Matrix &find_std_leading(std::size_t &s_r, std::size_t &s_c, Rational &det);
-    Matrix &reduce_by_std_leading(std::size_t &s_r, std::size_t &s_c, Rational &det);
-    Matrix &change_leading_to_one(std::size_t &s_r, std::size_t &s_c, Rational &det);
-    Matrix &one_REF(std::size_t &s_r, std::size_t &s_c, Rational &det);
-    Matrix &REF(Rational &det);
+    Matrix solve(const Matrix &b) const;
     // det
     bool is_square() const;
-    Rational det();
+    T det() const;
     // reverse
     Matrix inverse() const;
 
 private:
-    std::size_t row_;
-    std::size_t column_;
-    std::vector<Rational> data;
+    std::size_t row_{0};
+    std::size_t column_{0};
+    std::vector<T> data;
 };
+
+// operation overload
+template <typename U>
+std::ostream &operator<<(std::ostream &out, const Matrix<U> &a);
+
+template <typename U>
+Matrix<U> operator+(const Matrix<U> &a, const Matrix<U> &b);
+
+template <typename U>
+Matrix<U> operator-(const Matrix<U> &a);
+
+template <typename U>
+Matrix<U> operator-(const Matrix<U> &a, const Matrix<U> &b);
+
+template <typename U>
+Matrix<U> operator*(const U &s, const Matrix<U> &a);
+
+template <typename U>
+Matrix<U> operator*(const Matrix<U> &a, const U &s);
+
+template <typename U>
+Matrix<U> operator*(const Matrix<U> &a, const Matrix<U> &b);
+
+template <typename U>
+std::istream &operator>>(std::istream &in, Matrix<U> &a);
+
+#include "Matrix.tpp"
+#include "MatrixOps.tpp"
 #endif
+
+// T value =T{} 模版不能保证T能从0转换
+// 自己不变的就一定要加上const
+// at（）要特别注意返回的是应用，一个读一个改，前const是元素不变，后const是矩阵不变
