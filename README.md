@@ -21,3 +21,6 @@ This project was refactored to follow standard C++ header/source separation.
 ```bash
 g++ -std=c++17 main.cpp Matrix.cpp Rational.cpp -o matrix
 ./matrix
+
+
+testeste
